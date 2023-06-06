@@ -6,10 +6,17 @@ public class PlaceMonster : MonoBehaviour
 {
     public GameObject monsterPrefab;
     private GameObject monster;
+    private GameManagerBehaviour gameManager;
+
+    private void Start()
+    {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManagerBehaviour>();
+    }
 
     private bool CanPlaceMonster()
     {
-        return monster == null;
+        int cost = monsterPrefab.GetComponent<MonsterData>().levels[0].cost;
+        return monster == null && gameManager.Gold >= cost;
     }
 
     private bool CanUpgradeMonster()
@@ -20,7 +27,7 @@ public class PlaceMonster : MonoBehaviour
             MonsterLevel nextLevel = monsterData.GetNextLevel();
             if(nextLevel != null)
             {
-                return true;
+                return gameManager.Gold >= nextLevel.cost;
             }
         }
         return false;
@@ -35,7 +42,7 @@ public class PlaceMonster : MonoBehaviour
             AudioSource audioSource = gameObject.GetComponent<AudioSource>();
             audioSource.PlayOneShot(audioSource.clip);
 
-            //TODO: Deduct gold
+            gameManager.Gold -= monster.GetComponent<MonsterData>().CurrentLevel.cost;
         }
         else if(CanUpgradeMonster())
         {            
@@ -43,7 +50,7 @@ public class PlaceMonster : MonoBehaviour
             AudioSource audioSource = gameObject.GetComponent<AudioSource>();
             audioSource.PlayOneShot(audioSource.clip);
 
-            //TODO: Deduct gold
+            gameManager.Gold -= monster.GetComponent<MonsterData>().CurrentLevel.cost;
         }
     }
 }
