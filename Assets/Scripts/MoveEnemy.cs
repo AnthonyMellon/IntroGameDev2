@@ -27,9 +27,9 @@ public class MoveEnemy : MonoBehaviour
 
         if(gameObject.transform.position.Equals(endPosition))
         {
-            if (currentTimeOnPath < waypoints.Length - 2)
+            if (currentWaypoint < waypoints.Length - 2)
             {
-                currentTimeOnPath++;
+                currentWaypoint++;
                 lastWaypointSwitchTime = Time.time;
                 //TODO: rotate into move direction 
             }
