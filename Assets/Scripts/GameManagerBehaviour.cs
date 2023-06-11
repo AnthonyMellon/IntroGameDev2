@@ -23,7 +23,7 @@ public class GameManagerBehaviour : MonoBehaviour
     }
 
     private int wave;
-    private int Wave
+    public int Wave
     {
         get { return wave; }
         set
