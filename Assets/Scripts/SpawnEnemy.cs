@@ -7,8 +7,26 @@ using UnityEngine;
 public class Wave
 {
     public GameObject enemyPrefab;
+    public List<EnemyConfig> possibleEnemies;
     public float spawnInterval = 2;
     public int maxEnemies = 20;
+
+    public GameObject SpawnRandomEnemy()
+    {
+        return SpawnEnemy(Random.Range(0, possibleEnemies.Count));
+    }
+
+    public GameObject SpawnEnemy(int enemyIndex)
+    {
+        GameObject spawnedEnemy = GameObject.Instantiate(enemyPrefab);
+        EnemyConfig enemyConfig = possibleEnemies[enemyIndex];
+
+        spawnedEnemy.transform.Find("Sprite").GetComponent<Animator>().runtimeAnimatorController = enemyConfig.animatorController;
+        spawnedEnemy.transform.Find("HealthBar").GetComponent<HealthBar>().maxHealth = enemyConfig.health;
+        spawnedEnemy.transform.GetComponent<MoveEnemy>().speed = enemyConfig.speed;
+
+        return spawnedEnemy;
+    }
 }
 
 public class SpawnEnemy : MonoBehaviour
@@ -40,7 +58,7 @@ public class SpawnEnemy : MonoBehaviour
             (enemiesSpawned < waves[currentWave].maxEnemies))
             {
                 lastSpawnTime = Time.time;
-                GameObject newEnemy = (GameObject)Instantiate(waves[currentWave].enemyPrefab);
+                GameObject newEnemy = waves[currentWave].SpawnRandomEnemy();
                 newEnemy.GetComponent<MoveEnemy>().waypoints = waypoints;
                 enemiesSpawned++;
             }

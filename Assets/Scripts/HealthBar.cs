@@ -11,6 +11,7 @@ public class HealthBar : MonoBehaviour
     private void Start()
     {
         originalScale = gameObject.transform.localScale.x;
+        currentHealth = maxHealth;
     }
 
     private void Update()
